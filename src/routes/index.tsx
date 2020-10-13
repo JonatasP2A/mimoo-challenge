@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Landing from '../pages/Landing';
+import Landing from '../pages/landing';
 import Prancheta from '../pages/Prancheta';
 import Products from '../pages/Products';
 import Scan from '../pages/Scan';
