@@ -1,13 +1,13 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
 
-import Landing from '../pages/Landing';
-import Prancheta from '../pages/Prancheta';
-import Products from '../pages/Products';
-import Scan from '../pages/Scan';
-import Confirmation from '../pages/Confirmation';
+import Landing from "../pages/landing";
+import Prancheta from "../pages/Prancheta";
+import Products from "../pages/Products";
+import Scan from "../pages/Scan";
+import Confirmation from "../pages/Confirmation";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +23,6 @@ const Routes = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default Routes;
