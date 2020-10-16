@@ -2,39 +2,46 @@ import React from 'react';
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-const SkinCare:React.FC = () => {
+interface Props {
+  brands: [
+    {
+      name: string;
+      products: [
+        {
+          name: string;
+          image: string;
+        }
+      ]
+    }
+  ]
+}
+
+const SkinCare:React.FC<Props> = ({ brands }) => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Feather name="map-pin" size={20} color="#999999" />
-          <Text style={styles.headerText}>Nivea</Text>
-        </View>
+    <View style={styles.container}>
+      {brands.map(brand => (
+        <>
+          <View key={brand.name} style={styles.header}>
+            <Feather name="map-pin" size={20} color="#999999" />
+            <Text style={styles.headerText}>{brand.name}</Text>
+          </View>
 
-        <View style={styles.products}>
-          <View style={styles.product}>
-            <Image source={require('../../assets/nivea_kids.png')} style={styles.image} />
+          <View style={styles.products}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 20 }}
+            >
+              {brand.products.map(product => (
+                <View key={product.name} style={styles.product}>
+                  <Image source={{ uri: product.image }} style={styles.image} />
+                </View>
+              ))}
+            </ScrollView>
           </View>
-          <View style={styles.product}>
-            <Image source={require('../../assets/nivea.png')} style={styles.image} />
-          </View>
-        </View>
-
-        <View style={styles.header}>
-          <Feather name="map-pin" size={20} color="#999999" />
-          <Text style={styles.headerText}>Jeunesse</Text>
-        </View>
-
-        <View style={styles.products}>
-          <View style={styles.product}>
-            <Image source={require('../../assets/jeunesse.png')} style={styles.image} />
-          </View>
-          <View style={styles.product}>
-            <Image source={require('../../assets/jeunesse3.png')} style={styles.image} />
-          </View>
-        </View>
-      </View>
-    </ScrollView>
+        </>
+      ))}
+    </View>
   );
 }
 
@@ -57,15 +64,16 @@ const styles = StyleSheet.create({
 
   products: {
     flexDirection: "row",
-    justifyContent: "space-between",
     marginTop: 8,
     marginBottom: 8
   },
 
   product: {
     backgroundColor: '#CEB5AB',
-    width: 160,
-    height: 160,
+    justifyContent: "space-between",
+    marginRight: 8,
+    width: 150,
+    height: 150,
     borderRadius: 8
   },
 

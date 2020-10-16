@@ -1,18 +1,26 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
+
+interface Params {
+  name: string;
+  image: string;
+}
 
 function Confirmation() {
   const navigation = useNavigation();
+
+  const route = useRoute();
+  const { name, image } = route.params as Params;
   
   return (
     <>
       <View style={styles.container}>
         <Text style={styles.description}>Identificamos{"\n"}que você consome</Text>
-        <Text style={styles.brand}>Jeunesse SPA</Text>
+        <Text style={styles.brand}>{name}</Text>
 
-        <Image source={require("../../assets/jeunesse.png")} style={styles.image} />
+        <Image source={{ uri: image }} style={styles.image} />
 
         <Text style={styles.congratulation}>Parabéns{"\n"}Você ganhou 100 pontos!</Text>
         <Text style={styles.continue}>Continue para ganhar ainda{"\n"}mais pontos</Text>

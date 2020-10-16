@@ -1,24 +1,47 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { BaseButton, RectButton } from 'react-native-gesture-handler';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
 
+import api from '../../services/api';
+
 import SkinCare from '../../components/SkinCare';
-import Snacks from '../../components/Snacks';
 
 interface Params {
   name: string;
 }
 
+interface Products {
+  category: string;
+  brands: [
+    {
+      name: string;
+      products: [
+        {
+          name: string;
+          image: string;
+        }
+      ]
+    }
+  ]
+}
+
 function Products() { 
   const [skinCareSelected, setSkinCareSelected] = useState(true);
+  const [products, setProducts] = useState<Products[]>()
 
   const route = useRoute();
   const { name } = route.params as Params;
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    api.get('products').then(response => {
+      setProducts(response.data);
+    })
+  }, []);
 
   return (
     <>
@@ -45,7 +68,22 @@ function Products() {
           </View>
         </View>
 
-        {skinCareSelected ? <SkinCare /> : <Snacks />}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {skinCareSelected && (
+            products?.map(product => (
+              product.category === 'Skin Care' &&
+              <SkinCare key={product.category} brands={product.brands} />
+            ))
+          )}
+
+          {!skinCareSelected && (
+            products?.map(product => (
+              product.category === 'Snacks' &&
+              <SkinCare key={product.category} brands={product.brands} />
+            ))
+          )}
+        </ScrollView>
+
         <RectButton onPress={() => navigation.navigate("Scan")} style={styles.addButton}>
           <Feather name="plus" size={30} color="#FFFFFF" />
         </RectButton>

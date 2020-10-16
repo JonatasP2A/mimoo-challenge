@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import Constants from 'expo-constants';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
+import api from '../../services/api';
+
+interface Response {
+  name: string;
+  image: string;
+  brand: string;
+}
 
 function Scan() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState(false);
+  const [barCode, setBarCode] = useState('000000000000000');
+  const [product, setProduct] = useState<Response>();
 
   const navigation = useNavigation();
 
@@ -27,8 +36,18 @@ function Scan() {
     return <Text>Acesso negado!</Text>
   }
 
-  function handleBarCodeScanned() {
+  function handleBarCodeScanned({ data }: any) {
     setScanned(true);
+    setBarCode(data);
+
+    api.get(`products/${barCode}`).then(response => {
+      if (response.status === 200) {
+        Alert.alert('Produto encontrado');
+        setProduct(response.data);
+      } else {
+        Alert.alert('Produto não encontrado');
+      }
+    })
   }
 
   return (
@@ -49,10 +68,10 @@ function Scan() {
 
       <View style={styles.code}>
         <Text style={styles.codeText}>Número do código de barras:</Text>
-        <Text style={styles.codeNumber}>000000000000000</Text>
+        <Text style={styles.codeNumber}>{barCode}</Text>
       </View>
 
-      <RectButton style={styles.button} onPress={() => {navigation.navigate("Confirmation")}}>
+      <RectButton style={styles.button} onPress={() => {navigation.navigate("Confirmation", { name: product?.name, image: product?.image })}}>
         <Text style={styles.buttonText}>Confirmar</Text>
       </RectButton>
     </View>
