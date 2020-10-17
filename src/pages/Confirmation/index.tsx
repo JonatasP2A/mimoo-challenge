@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
+import { useCount } from '../../hook/Count';
 
 interface Params {
   name: string;
@@ -10,9 +11,15 @@ interface Params {
 
 function Confirmation() {
   const navigation = useNavigation();
+  const { count, setCount } = useCount();
 
   const route = useRoute();
   const { name, image } = route.params as Params;
+
+  async function handleNavigate(): Promise<void> {
+    setCount(count + 100);
+    navigation.navigate("Products");
+  }
   
   return (
     <>
@@ -26,7 +33,7 @@ function Confirmation() {
         <Text style={styles.continue}>Continue para ganhar ainda{"\n"}mais pontos</Text>
 
       </View>
-      <RectButton style={styles.button} onPress={() => {navigation.navigate("Products")}}>
+      <RectButton style={styles.button} onPress={handleNavigate}>
         <Text style={styles.buttonText}>Confirmar</Text>
       </RectButton>
     </>

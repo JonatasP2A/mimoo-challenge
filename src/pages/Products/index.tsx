@@ -4,6 +4,7 @@ import { BaseButton, RectButton } from 'react-native-gesture-handler';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
+import { useCount } from '../../hook/Count';
 
 import api from '../../services/api';
 
@@ -30,7 +31,9 @@ interface Products {
 
 function Products() { 
   const [skinCareSelected, setSkinCareSelected] = useState(true);
-  const [products, setProducts] = useState<Products[]>()
+  const [products, setProducts] = useState<Products[]>();
+
+  const { count } = useCount();
 
   const route = useRoute();
   const { name } = route.params as Params;
@@ -53,7 +56,7 @@ function Products() {
           <MaterialIcons name="grade" color="#482F05" size={13} />
           <Text style={styles.pointsText}>Pontos</Text>
         </View>
-        <Text style={styles.total}>200</Text>
+        <Text style={styles.total}>{count}</Text>
 
         <View style={styles.buttons}>
           <View style={skinCareSelected ? styles.buttonSelected : styles.button}>
